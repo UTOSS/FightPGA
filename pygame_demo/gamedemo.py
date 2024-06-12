@@ -106,8 +106,7 @@ class Player:
                 self.state="WIN"
                 op.state="LOSE"
     def display(self):
-        if self.state in ACTIONABLE:
-            self.sprite=pygame.draw.rect(screen, self.getcolor(), pygame.Rect(self.position, HEIGHT-FLOOR_HEIGHT-PHEIGHT, PWIDTH, PHEIGHT))
+        self.sprite=pygame.draw.rect(screen, self.getcolor(), pygame.Rect(self.position, HEIGHT-FLOOR_HEIGHT-PHEIGHT, PWIDTH, PHEIGHT))
         #self.action_timer = max(self.action_timer-1, 0)
     def get_hitbox(self):
         return (self.position, self.position+PWIDTH)
