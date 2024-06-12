@@ -38,10 +38,17 @@ KICK_STARTUP = 15
 KICK_ENDLAG = 20
 GRAB_STARTUP = 5
 GRAB_ENDLAG=30
-KICK_RANGE=44
-GRAB_RANGE=int(KICK_RANGE/4)
+KICK_RANGE=120
+GRAB_RANGE=int(2*KICK_RANGE/3)
 GRAB_ACTIVE=GRAB_ENDLAG
 KICK_ACTIVE=KICK_ENDLAG
+KICK_HEIGHT_ACTIVE=150
+KICK_HEIGHT_START=95
+GRAB_HEIGHT=290
+KICK_THICK=45
+GRAB_THICK=25
+KICK_PULLBACK=15
+GRAB_PULLBACK=10
 #       LEFT        RIGHT       KICK        BLOCK       GRAB
 
 class Player:
@@ -70,10 +77,15 @@ class Player:
             p2 = self
         return p1.position >= p2.position-PWIDTH
     def range_check(self, op, attack_range):
+        hitbox_extension = 0
+        if op.state=="KICK":
+            hitbox_extension=KICK_RANGE
+        elif op.state=="GRAB":
+            hitbox_extension=GRAB_RANGE
         if self.player == 1:
-            return len(set(range(self.position+PWIDTH,self.position+PWIDTH+attack_range+1)) & set(range(op.position,op.position+PWIDTH)) )>0
+            return len(set(range(self.position+PWIDTH,self.position+PWIDTH+attack_range+1+hitbox_extension)) & set(range(op.position,op.position+PWIDTH)) )>0
         else:
-            return len(set(range(self.position-attack_range-1, self.position))&set(range(op.position,op.position+PWIDTH)))>0
+            return len(set(range(self.position-attack_range-1-hitbox_extension, self.position))&set(range(op.position,op.position+PWIDTH)))>0
         return p1.position >= p2.position-PWIDTH
     def send_key(self, action):
         if self.state in ACTIONABLE or self.action_timer<=0:
@@ -105,8 +117,31 @@ class Player:
             if self.action_timer==GRAB_ACTIVE and self.range_check(op, GRAB_RANGE):
                 self.state="WIN"
                 op.state="LOSE"
+    def draw_action_sprite(self):
+        if self.state=="KICK":
+            if self.action_timer > KICK_ENDLAG or self.action_timer < KICK_ENDLAG-KICK_PULLBACK:
+                kwidth,kheight,kvert=int(KICK_RANGE*2/3), int(KICK_THICK*2/3), KICK_HEIGHT_START
+            else:
+                kwidth,kheight,kvert=KICK_RANGE, KICK_THICK, KICK_HEIGHT_ACTIVE
+            if self.player==1:
+                h_mod = PWIDTH
+            else:
+                h_mod = -1*kwidth
+            pygame.draw.rect(screen,self.getcolor(), pygame.Rect(self.position+h_mod, HEIGHT-FLOOR_HEIGHT-kvert, kwidth,kheight))
+        elif self.state=="GRAB":
+            if self.action_timer > GRAB_ENDLAG or self.action_timer < GRAB_ENDLAG-GRAB_PULLBACK:
+                kwidth,kheight,kvert=int(GRAB_RANGE*3/5), GRAB_THICK, GRAB_HEIGHT
+            else:
+                kwidth,kheight,kvert=GRAB_RANGE, GRAB_THICK, GRAB_HEIGHT
+            if self.player==1:
+                h_mod = PWIDTH
+            else:
+                h_mod = -1*kwidth
+            pygame.draw.rect(screen,self.getcolor(), pygame.Rect(self.position+h_mod, HEIGHT-FLOOR_HEIGHT-kvert, kwidth,kheight))
     def display(self):
         self.sprite=pygame.draw.rect(screen, self.getcolor(), pygame.Rect(self.position, HEIGHT-FLOOR_HEIGHT-PHEIGHT, PWIDTH, PHEIGHT))
+        if not self.state in ACTIONABLE:
+            self.draw_action_sprite()
         #self.action_timer = max(self.action_timer-1, 0)
     def get_hitbox(self):
         return (self.position, self.position+PWIDTH)
@@ -130,10 +165,10 @@ def main():
         keys=pygame.key.get_pressed()
         ##P1 logic
 
-        if keys[P1KEYS["b"]]:
-            p1_next_state="BLOCK"
-        elif keys[P1KEYS["k"]]:
+        if keys[P1KEYS["k"]]:
             p1_next_state="KICK"
+        elif keys[P1KEYS["b"]]:
+            p1_next_state="BLOCK"
         elif keys[P1KEYS["g"]]:
             p1_next_state="GRAB"
         elif keys[P1KEYS["wb"]]:
@@ -143,11 +178,10 @@ def main():
         else:
             p1_next_state="NOTHING"
         ##P2 LOGIC
-
-        if keys[P2KEYS["b"]]:
-            p2_next_state="BLOCK"
-        elif keys[P2KEYS["k"]]:
+        if keys[P2KEYS["k"]]:
             p2_next_state="KICK"
+        elif keys[P2KEYS["b"]]:
+            p2_next_state="BLOCK"
         elif keys[P2KEYS["g"]]:
             p2_next_state="GRAB"
         elif keys[P2KEYS["wb"]]:
