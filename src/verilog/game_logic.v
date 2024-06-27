@@ -14,4 +14,22 @@ module game_logic(
 	output [SPRITE_INDEX_DEPTH-1:0] p2_sprite
 );
 
+	// Player registers:
+	// State, position, activeframe
+	reg [STATE_DEPTH-1:0] reg_p1_state;
+	reg [STATE_DEPTH-1:0] reg_p2_state;
+	reg [POSITION_DEPTH-1:0] reg_p1_position;
+	reg [POSITION_DEPTH-1:0] reg_p2_position;
+	reg [SPRITE_INDEX_DEPTH-1:0] reg_p1_sprite;
+	reg [SPRITE_INDEX_DEPTH-1:0] reg_p2_sprite;
+	
+	assign p1_state = reg_p1_state;
+	assign p2_state = reg_p2_state;
+	assign p1_position = reg_p1_position;
+	assign p2_position = reg_p2_position;
+	assign p1_sprite = reg_p1_sprite;
+	assign p2_sprite = reg_p2_sprite;
+	
+	
+
 endmodule
