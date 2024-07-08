@@ -23,9 +23,9 @@ parameter GRAB_ENDLAG = 30;
 parameter GRAB_FRAMES = GRAB_ENDLAG + GRAB_STARTUP;
 parameter KICK_FRAMES = KICK_ENDLAG + KICK_STARTUP;
 parameter KICK_RANGE = 80;
-parameter GRAB_RANGE = $ceil(2*KICK_RANGE/3);
+parameter GRAB_RANGE = 53; //$ceil(2*KICK_RANGE/3);
 parameter KICK_PULLBACK = 15;
 parameter GRAB_PULLBACK = 10;
 parameter F_WALK_FRAMES = 10;
-parameter F_WALK_FRAMES = 12;
+parameter B_WALK_FRAMES = 12;
 `endif
