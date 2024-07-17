@@ -13,6 +13,7 @@ module player_next_state_calc(
 );
 
 	reg [STATE_DEPTH-1:0] reg_next_state;
+	reg [INPUT_DEPTH-1:0] buffered_inputs;
 	reg new_frame;
 	
 	wire [STATE_DEPTH-1:0] state_from_buttons;
@@ -32,7 +33,7 @@ module player_next_state_calc(
 	// WILL LIKELY NEED TO ADD PIPELINING TO AVOID TIMING ISSUES
 	
 	gen_state_buttons g1 (
-		.buttons(player_buttons),
+		.buttons(buffered_inputs),
 		.state(player_state),
 		.next_state(state_from_buttons)
 	);
@@ -61,6 +62,10 @@ module player_next_state_calc(
 		end else begin
 			reg_next_state <= player_state;
 		end	
+	end
+	
+	always@(posedge frame_clk) begin
+		buffered_inputs <= player_buttons;
 	end
 	
 /*	always@(posedge clk, negedge clk) begin
