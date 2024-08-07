@@ -17,6 +17,7 @@
 # Backup files
 *.bak
 
+
 # ModelSim working files
 **/work/
 **/simulation/
@@ -33,3 +34,6 @@ hps/toolchain/
 hps/spl_bsp/generated/
 hps/spl_bsp/uboot-socfpga/
 hps/rootfs/
+
+# specific files
+src/verilog/params_dummy.vh
