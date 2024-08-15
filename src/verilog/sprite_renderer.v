@@ -45,10 +45,10 @@ module sprite_renderer(
 		end
 	end
 	
-	// Current issue: Due to clocked ROM, the first pixel gets duplicated twice
-	// Since at the first pixel, xcoord is 0
-	// Solution 1: register the address instead of the output?
-	// Solution 2: line_active goes early one x coordinate earlier?
+	// Variable sprite widths
+	// Option: Pad all sprites to a particular length
+	// Have custom "animation width" for each sprite (replaces the SPRITE_WIDTH parameter) where it just stops drawing
+	// Player 1 sprites get priority: add a mux which checks if player 1 is active in that area - if they are, draw their sprites (unless it's an empty pixel - then draw player 2)
 	
 	parameter ACCESS_OFFSET = 2;
 	
@@ -57,13 +57,6 @@ module sprite_renderer(
 		.addr((ycoord-(SCREEN_HEIGHT-FLOOR_HEIGHT-SPRITE_HEIGHT))* SPRITE_WIDTH + (xcoord-sprite_position + ACCESS_OFFSET)), //pixel_select
 		.pixel(color_code)
 	);
-	
-	/*sprite_rom_v2 r0(
-		.clk(clk),
-		.addr_x(xcoord-sprite_position),
-		.addr_y(SCREEN_HEIGHT-FLOOR_HEIGHT-1-ycoord),
-		.pixel(color_code)
-	);*/
 	
 	color_select c0(
 		.pix(color_draw),

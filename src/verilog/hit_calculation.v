@@ -8,6 +8,7 @@ module hit_calculator(
 	input [SPRITE_INDEX_DEPTH-1:0] p1_frame,
 	input [SPRITE_INDEX_DEPTH-1:0] p2_frame,
 	input clk,
+	input reset,
 	output p1_connects,
 	output p2_connects
 );
@@ -25,10 +26,10 @@ module hit_calculator(
 	assign p2_kicking = p2_state == KICK;
 	assign p1_grabbing = p1_state == GRAB;
 	assign p2_grabbing = p2_state == GRAB;
-	assign p1_kick_active = p1_sprite == KICK_STARTUP-1;
-	assign p1_grab_active = p1_sprite == GRAB_STARTUP-1;
-	assign p2_kick_active = p2_sprite == KICK_STARTUP-1;
-	assign p2_grab_active = p2_sprite == GRAB_STARTUP-1;
+	assign p1_kick_active = p1_frame == KICK_STARTUP-1;
+	assign p1_grab_active = p1_frame == GRAB_STARTUP-1;
+	assign p2_kick_active = p2_frame == KICK_STARTUP-1;
+	assign p2_grab_active = p2_frame == GRAB_STARTUP-1;
 	
 	reg [POSITION_DEPTH-1:0] p1_effective_hurtbox;
 	reg [POSITION_DEPTH-1:0] p2_effective_hurtbox;
@@ -68,7 +69,7 @@ module hit_calculator(
 		end
 	end
 	
-	assign p1_attack_connected = p1_kick_connected | p1_grab_connected;
-	assign p2_attack_connected = p2_kick_connected | p2_grab_connected;
+	assign p1_connects = ((p1_kick_connected & p1_kicking) | (p1_grab_connected & p1_grabbing));
+	assign p2_connects = ((p2_kick_connected & p2_kicking) | (p2_grab_connected & p2_grabbing));
 	
 endmodule
