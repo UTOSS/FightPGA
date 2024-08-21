@@ -86,7 +86,7 @@ module player_next_state_calc(
 		.next_state(next_state)
 	);
 	
-	rising_edge_detector(
+	rising_edge_detector red1(
 		.clk(sys_clk),
 		.d(frame_clk),
 		.q(sampled_frame_clk)
@@ -167,14 +167,16 @@ module gen_action_timer(
 	
 	always@(posedge clk, negedge reset) begin
 		if(reset == 1'b0) begin
-				curr_action_end_frame <= 1'b0;
-				next_action_timer_reg <= NOTHING;
+				curr_action_end_frame <= 1;
+				next_action_timer_reg <= 0;
 		end else begin 
 			case(state)
-				KICK: curr_action_end_frame <= KICK_FRAMES;
-				GRAB: curr_action_end_frame <= GRAB_FRAMES;
-				WALK_FORWARD: curr_action_end_frame <= F_WALK_FRAMES;
-				WALK_BACKWARD: curr_action_end_frame <= B_WALK_FRAMES;
+				KICK: curr_action_end_frame <= KICK_FRAMES-1;
+				GRAB: curr_action_end_frame <= GRAB_FRAMES-1;
+				WALK_FORWARD: curr_action_end_frame <= F_WALK_FRAMES-1;
+				WALK_BACKWARD: curr_action_end_frame <= B_WALK_FRAMES-1;
+				WIN: curr_action_end_frame <= WIN_FRAMES-1;
+				LOSE: curr_action_end_frame <= LOSE_FRAMES-1;
 				default: curr_action_end_frame <= 1;
 			endcase
 		//next_action_timer_reg <= (state == next_state) ? ( (action_timer >= curr_action_end_frame-1) ? 0 : action_timer+1) : 0;

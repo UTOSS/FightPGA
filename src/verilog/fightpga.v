@@ -29,9 +29,8 @@ module fightpga(
 	wire [9:0] ycoord;
 	wire active_region;
 	wire [9:0] p1_position, p2_position;
-	wire [STATE_DEPTH-1:0] wire_p1_state;
-	wire [STATE_DEPTH-1:0] wire_p2_state;
-	
+	wire [STATE_DEPTH-1:0] state_p1, state_p2;
+	wire [SPRITE_INDEX_DEPTH-1:0] action_timer_p1, action_timer_p2;
 	vga_pll pll0(
 		.refclk(ref_clk),
 		.rst(~reset),
@@ -62,6 +61,10 @@ module fightpga(
 		.active(active_region),
 		.sprite_position_p1(p1_position),
 		.sprite_position_p2(p2_position),
+		.action_timer_p1(action_timer_p1),
+		.action_timer_p2(action_timer_p2),
+		.state_p1(state_p1),
+		.state_p2(state_p2),
 		.vga_r(vga_r),
 		.vga_g(vga_g),
 		.vga_b(vga_b)
@@ -73,6 +76,10 @@ module fightpga(
 		.frame_clk(~vsync),
 		.sys_clk(clk),
 		.rst(reset_lock),
+		.p1_state(state_p1),
+		.p2_state(state_p2),
+		.p1_sprite(action_timer_p1),
+		.p2_sprite(action_timer_p2),
 		.p1_position(p1_position),
 		.p2_position(p2_position)
 	);

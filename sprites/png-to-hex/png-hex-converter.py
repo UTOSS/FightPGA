@@ -71,26 +71,26 @@ def main_hex():
 
     #print(f"-\nLoaded image of {width} x {height} = {width * height} pixels")
 
-    sprite_suffixes = ["base", "block", "grab_active", "grab_whiff", "kick_active", "kick_whiff", "wb0", "wb1", "wf0", "wf1"]
+    sprite_suffixes = ["base", "block", "grab_active", "grab_whiff", "kick_active", "kick_whiff", "wb0", "wb1", "wf0", "wf1", "win0", "win1", "lose"]
 
     #out_filename = f"out_{int(time.time())}.hex"
     #out_filename = in_filename.strip()[:-4]+".hex"
     out_filename = "ryu.hex"
-    for suffix in sprite_suffixes:
-        width, height, pixels_raw = load_png("ryu_"+suffix+".png")
-        with open(out_filename, "w") as fp:
+    with open(out_filename, "w") as fp:
+        for suffix in sprite_suffixes:
+            width, height, pixels_raw = load_png("ryu_"+suffix+".png")
             print(f"-\nLoaded Ryu image of {width} x {height} = {width * height} pixels")
             for pixel in convert_pixels(pixels_raw):
                 fp.write(generate_data_line_hex(0, 0, pixel) + '\n')
-        print(f"Finished writing to {out_filename}")
+    print(f"Finished writing to {out_filename}")
     out_filename = "ken.hex"
-    for suffix in sprite_suffixes:
-        width, height, pixels_raw = load_png("ken_"+suffix+".png")
-        with open(out_filename, "w") as fp:
+    with open(out_filename, "w") as fp:
+        for suffix in sprite_suffixes:
+            width, height, pixels_raw = load_png("ken_"+suffix+".png")
             print(f"-\nLoaded Ken image of {width} x {height} = {width * height} pixels")
             for pixel in convert_pixels(pixels_raw):
                 fp.write(generate_data_line_hex(0, 0, pixel) + '\n')
-        print(f"Finished writing to {out_filename}")
+    print(f"Finished writing to {out_filename}")
 
 if __name__ == "__main__":
     main_hex()
