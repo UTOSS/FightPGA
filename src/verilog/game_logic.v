@@ -16,13 +16,6 @@ module game_logic(
 );
 	// Player registers:
 	// State, position, activeframe
-	reg [STATE_DEPTH-1:0] reg_p1_state;
-	reg [STATE_DEPTH-1:0] reg_p2_state;
-	reg [POSITION_DEPTH-1:0] reg_p1_position;
-	reg [POSITION_DEPTH-1:0] reg_p2_position;
-	reg [SPRITE_INDEX_DEPTH-1:0] reg_p1_sprite;
-	reg [SPRITE_INDEX_DEPTH-1:0] reg_p2_sprite;
-	
 	wire [STATE_DEPTH-1:0] wire_p1_state;
 	wire [STATE_DEPTH-1:0] wire_p2_state;
 	wire [POSITION_DEPTH-1:0] wire_p1_position;
@@ -76,32 +69,6 @@ module game_logic(
 		.p1_connects(p1_attack_connected),
 		.p2_connects(p2_attack_connected)
 	);
-	
-	/*always@(posedge frame_clk, negedge rst) begin
-		if(rst == 1'b0) begin
-			reg_p1_state <= NOTHING;
-			reg_p2_state <= NOTHING;
-			reg_p1_position <= P1_START;
-			reg_p2_position <= P2_START;
-			reg_p1_sprite <= 0;
-			reg_p2_sprite <= 0;
-		end else begin
-			reg_p1_state <= wire_p1_state;
-			reg_p2_state <= wire_p2_state;
-			reg_p1_sprite <= wire_p1_sprite;
-			reg_p2_sprite <= wire_p2_sprite;
-			reg_p1_position <= wire_p1_position;
-			reg_p2_position <= wire_p2_position;
-		end
-	end
-	
-	assign p1_state = reg_p1_state;
-	assign p2_state = reg_p2_state;
-	assign p1_position = reg_p1_position;
-	assign p2_position = reg_p2_position;
-	assign p1_sprite = reg_p1_sprite;
-	assign p2_sprite = reg_p2_sprite;
-	assign done_gen = p1_done & p2_done;*/
 	
 	assign p1_state = wire_p1_state;
 	assign p2_state = wire_p2_state;

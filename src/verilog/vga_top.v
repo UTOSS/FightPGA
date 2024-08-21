@@ -5,6 +5,7 @@ module vga_top(
 	output [9:0] vcount_out,
 	output [9:0] xcoord,
 	output [9:0] ycoord,
+	output frame_clk,
 	output hsync,
 	output vsync,
 	output display_en, // blank
