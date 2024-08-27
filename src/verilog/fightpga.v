@@ -71,8 +71,8 @@ module fightpga(
 	);
 	
 	game_logic g0(
-		.p1_inputs({3'b000,~p1_inputs[1:0]}),
-		.p2_inputs({3'b000,~p2_inputs[1:0]}),
+		.p1_inputs(~p1_inputs),
+		.p2_inputs(~p2_inputs),
 		.frame_clk(~vsync),
 		.sys_clk(clk),
 		.rst(reset_lock),

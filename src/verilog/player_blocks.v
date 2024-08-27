@@ -171,12 +171,12 @@ module gen_action_timer(
 				next_action_timer_reg <= 0;
 		end else begin 
 			case(state)
-				KICK: curr_action_end_frame <= KICK_FRAMES-1;
-				GRAB: curr_action_end_frame <= GRAB_FRAMES-1;
-				WALK_FORWARD: curr_action_end_frame <= F_WALK_FRAMES-1;
-				WALK_BACKWARD: curr_action_end_frame <= B_WALK_FRAMES-1;
-				WIN: curr_action_end_frame <= WIN_FRAMES-1;
-				LOSE: curr_action_end_frame <= LOSE_FRAMES-1;
+				KICK: curr_action_end_frame <= KICK_FRAMES;
+				GRAB: curr_action_end_frame <= GRAB_FRAMES;
+				WALK_FORWARD: curr_action_end_frame <= F_WALK_FRAMES;
+				WALK_BACKWARD: curr_action_end_frame <= B_WALK_FRAMES;
+				WIN: curr_action_end_frame <= WIN_FRAMES;
+				LOSE: curr_action_end_frame <= LOSE_FRAMES;
 				default: curr_action_end_frame <= 1;
 			endcase
 		//next_action_timer_reg <= (state == next_state) ? ( (action_timer >= curr_action_end_frame-1) ? 0 : action_timer+1) : 0;

@@ -15,6 +15,8 @@ module hit_calculator(
 
 	wire p1_kicking;
 	wire p2_kicking;
+	wire p1_blocking;
+	wire p2_blocking;
 	wire p1_grabbing;
 	wire p2_grabbing;
 	wire p1_kick_active;
@@ -26,6 +28,8 @@ module hit_calculator(
 	assign p2_kicking = p2_state == KICK;
 	assign p1_grabbing = p1_state == GRAB;
 	assign p2_grabbing = p2_state == GRAB;
+	assign p1_blocking = p1_state == BLOCK;
+	assign p2_blocking = p2_state == BLOCK;
 	assign p1_kick_active = p1_frame == KICK_STARTUP-1;
 	assign p1_grab_active = p1_frame == GRAB_STARTUP-1;
 	assign p2_kick_active = p2_frame == KICK_STARTUP-1;
@@ -69,7 +73,7 @@ module hit_calculator(
 		end
 	end
 	
-	assign p1_connects = ((p1_kick_connected & p1_kicking) | (p1_grab_connected & p1_grabbing));
-	assign p2_connects = ((p2_kick_connected & p2_kicking) | (p2_grab_connected & p2_grabbing));
+	assign p1_connects = ((p1_kick_connected & p1_kicking & ~p2_blocking) | (p1_grab_connected & p1_grabbing));
+	assign p2_connects = ((p2_kick_connected & p2_kicking & ~p1_blocking) | (p2_grab_connected & p2_grabbing));
 	
 endmodule

@@ -148,6 +148,7 @@ module sprite_offset_gen(
 				else
 					offset_reg <= KICK_WHIFF_OFFSET;
 			end
+			BLOCK: offset_reg <= BLOCK_OFFSET;
 			WIN: offset_reg <= (index > WIN_FRAME0) ? WIN1_OFFSET : WIN0_OFFSET;
 			LOSE: offset_reg <= LOSE_OFFSET;
 			default: offset_reg <= BASE_OFFSET;
