@@ -5,6 +5,7 @@ module fightpga(
 	input reset,
 	input [4:0] p1_inputs,
 	input [4:0] p2_inputs,
+	input [1:0] palette_select,
 	output hsync,
 	output vsync,
 	output display_en,
@@ -19,8 +20,9 @@ module fightpga(
 	wire clk;
 	wire reset_lock;
 	wire pll_lock;
+	wire win_reset;
 	assign pll_locked = pll_lock;
-	assign reset_lock = pll_lock & reset;
+	assign reset_lock = pll_lock & reset & win_reset;
 	
 	// vga phy wires
 	wire [9:0] hcount;
@@ -65,6 +67,7 @@ module fightpga(
 		.action_timer_p2(action_timer_p2),
 		.state_p1(state_p1),
 		.state_p2(state_p2),
+		.palette_select(palette_select),
 		.vga_r(vga_r),
 		.vga_g(vga_g),
 		.vga_b(vga_b)
@@ -81,7 +84,8 @@ module fightpga(
 		.p1_sprite(action_timer_p1),
 		.p2_sprite(action_timer_p2),
 		.p1_position(p1_position),
-		.p2_position(p2_position)
+		.p2_position(p2_position),
+		.win_reset(win_reset)
 	);
 	
 	assign display_en = active_region;

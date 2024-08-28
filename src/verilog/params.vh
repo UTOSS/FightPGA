@@ -33,7 +33,7 @@ parameter SPRITE_INDEX_DEPTH = 6;
 parameter F_WALK_SPEED = 5;
 parameter B_WALK_SPEED = 4;
 parameter P1_START = 50;
-parameter P2_START = SCREEN_WIDTH - P1_START - PLAYER_WIDTH;
+parameter P2_START = SCREEN_WIDTH - P1_START - 4*PLAYER_WIDTH;
 parameter PLAYER_WIDTH = 36;
 parameter KICK_STARTUP = 15;
 parameter KICK_ENDLAG = 20;
@@ -42,7 +42,7 @@ parameter GRAB_ENDLAG = 30;
 parameter GRAB_FRAMES = GRAB_ENDLAG + GRAB_STARTUP;
 parameter KICK_FRAMES = KICK_ENDLAG + KICK_STARTUP;
 parameter KICK_RANGE = 80;
-parameter GRAB_RANGE = 53; //$ceil(2*KICK_RANGE/3);
+parameter GRAB_RANGE = 40; //$ceil(2*KICK_RANGE/3);
 parameter KICK_EXTENSION = 60;
 parameter GRAB_EXTENSION = 20;
 parameter KICK_PULLBACK = 15;
@@ -56,11 +56,12 @@ parameter B_WALK_FRAME0 = 4;
 parameter B_WALK_FRAME1 = 8;
 parameter B_WALK_FRAME2 = 12;
 parameter GRAB_PULLBACK_FRAME = 20;
-parameter KICK_PULLBACK_FRAME = 15;
+parameter KICK_PULLBACK_FRAME = 25;
 parameter WIN_FRAMES = 60;
 parameter LOSE_FRAMES = 60;
 parameter WIN_FRAME0 = 30;
 parameter LOSE_FRAME0 = 30;
+parameter WIN_FRAMES_WAIT = 2*6*WIN_FRAME0;
 
 // Sprite Drawing parameters
 parameter SPRITE_HEIGHT = 76*2;
@@ -105,5 +106,9 @@ parameter COLOR_RED = 24'hff0000;
 parameter COLOR_BLUE = 24'h0000ff;
 parameter COLOR_WHITE = 24'hffffff;
 parameter COLOR_BLACK = 24'h000000;
+parameter COLOR_GREEN = 24'h00ff00;
+parameter COLOR_PURPLE = 24'hff00ff;
+parameter COLOR_ORANGE = 24'hffa500;
+parameter COLOR_YELLOW = 24'hffff00;
 
 `endif

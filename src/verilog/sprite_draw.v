@@ -15,6 +15,7 @@ module sprite_draw(
 	input [STATE_DEPTH-1:0] state_p2,
 	input [SPRITE_INDEX_DEPTH-1:0] action_timer_p1,
 	input [SPRITE_INDEX_DEPTH-1:0] action_timer_p2,
+	input [1:0] palette_select,
 	output [7:0] vga_r,
 	output [7:0] vga_g,
 	output [7:0] vga_b
@@ -78,6 +79,7 @@ module sprite_draw(
 	
 	color_select c0(
 		.pix(color_vga),
+		.palette_select(palette_select),
 		.r(vga_r),
 		.g(vga_g),
 		.b(vga_b)
@@ -86,24 +88,81 @@ endmodule
 
 module color_select(
 	input [COLOR_DEPTH-1:0] pix,
+	input [1:0] palette_select,
 	output [7:0] r,
 	output [7:0] g,
 	output [7:0] b
 );
 
+	wire [23:0] red, black, blue, white;
+	
+	palette_select ps1(
+		.select(palette_select),
+		.cred(red),
+		.cblue(blue),
+		.cblack(black),
+		.cwhite(white)
+	);
+
 	reg [23:0] rgb;
 	always@(*) begin
 		case(pix)
-			COLOR_BLACK_CODE: rgb <= COLOR_BLACK;
-			COLOR_RED_CODE: rgb <= COLOR_RED;
-			COLOR_BLUE_CODE: rgb <= COLOR_BLUE;
-			COLOR_WHITE_CODE: rgb <= COLOR_WHITE;
+			COLOR_BLACK_CODE: rgb <= black;
+			COLOR_RED_CODE: rgb <= red;
+			COLOR_BLUE_CODE: rgb <= blue;
+			COLOR_WHITE_CODE: rgb <= white;
 		endcase
 	end
 	
 	assign r = rgb[23:16];
 	assign g = rgb[15:8];
 	assign b = rgb[7:0];
+endmodule
+
+module palette_select(
+	input [1:0] select,
+	output [23:0] cred,
+	output [23:0] cblue,
+	output [23:0] cwhite,
+	output [23:0] cblack
+);
+
+	reg [23:0] reg_cred, reg_cblue, reg_cwhite, reg_cblack;
+
+	always@(*) begin
+		case(select)
+			2'b00: begin
+				reg_cwhite <= COLOR_WHITE;
+				reg_cblack <= COLOR_BLACK;
+				reg_cred <= COLOR_RED;
+				reg_cblue <= COLOR_BLUE;
+			end
+			2'b01: begin
+				reg_cwhite <= COLOR_WHITE;
+				reg_cblack <= COLOR_BLACK;
+				reg_cred <= COLOR_PURPLE;
+				reg_cblue <= COLOR_ORANGE;
+			end
+			2'b10: begin
+				reg_cwhite <= COLOR_BLACK;
+				reg_cblack <= COLOR_WHITE;
+				reg_cred <= COLOR_RED;
+				reg_cblue <= COLOR_BLUE;
+			end
+			2'b11: begin
+				reg_cwhite <= COLOR_BLACK;
+				reg_cblack <= COLOR_WHITE;
+				reg_cred <= COLOR_GREEN;
+				reg_cblue <= COLOR_YELLOW;
+			end
+		endcase
+	end
+	
+	assign cred = reg_cred;
+	assign cblue = reg_cblue;
+	assign cwhite = reg_cwhite;
+	assign cblack = reg_cblack;
+
 endmodule
 
 module sprite_offset_gen(

@@ -6,6 +6,7 @@ module game_logic(
 	input frame_clk,
 	input sys_clk,
 	input rst,
+	output win_reset,
 	output [STATE_DEPTH-1:0] p1_state,
 	output [STATE_DEPTH-1:0] p2_state,
 	output [POSITION_DEPTH-1:0] p1_position,
@@ -70,6 +71,14 @@ module game_logic(
 		.p2_connects(p2_attack_connected)
 	);
 	
+	win_reset_gen w1(
+		.p1_state(p1_state),
+		.p2_state(p2_state),
+		.frame_clk(frame_clk),
+		.reset(rst),
+		.win_reset(win_reset)
+	);
+	
 	assign p1_state = wire_p1_state;
 	assign p2_state = wire_p2_state;
 	assign p1_position = wire_p1_position;
@@ -77,5 +86,30 @@ module game_logic(
 	assign p1_sprite = wire_p1_sprite;
 	assign p2_sprite = wire_p2_sprite;
 	assign done_gen = p1_done & p2_done;
+
+endmodule
+
+module win_reset_gen(
+	input [STATE_DEPTH-1:0] p1_state,
+	input [STATE_DEPTH-1:0] p2_state,
+	input frame_clk,
+	input reset,
+	output win_reset
+);
+
+	reg [9:0] win_frame_count;
+
+	always@(posedge frame_clk, negedge reset) begin
+		if(reset == 1'b0)
+			win_frame_count <= 0;
+		else begin
+			if(p1_state == WIN | p2_state == WIN)
+				win_frame_count <= win_frame_count + 1;
+			else
+				win_frame_count <= win_frame_count;
+		end
+	end
+	
+	assign win_reset = win_frame_count != WIN_FRAMES_WAIT - 1;
 
 endmodule
